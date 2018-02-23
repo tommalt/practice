@@ -104,11 +104,11 @@ int main(int argc, char **argv)
 	while (--argc) {
 		char *s = *++argv;
 		long int size = parseIntL(s);
-		int b = benchmark(size);
-		int t = test(size);
+		long int b = benchmark(size);
+		long int t = test(size);
 		if (b != t)
 			die("Test failed for size = %d. Benchmark, test: %d %d\n", size, b, t);
-		printf("%6d %15d %9d\n", size, b, t);
+		printf("%6ld %15ld %9ld\n", size, b, t);
 	}
 	free(cache);
 	return 0;
