@@ -34,16 +34,49 @@ string collapse(string s)
 	return ret;
 }
 
+string collapse2(string s)
+{
+	string ret;
+	if (s.empty())
+		return "";
+
+	ret.reserve(s.size());
+	auto p = s.begin();
+	char last = *p++;
+	int count = 1;
+	for (; p != s.end(); p++) {
+		if (*p == last) {
+			count++;
+			if (count == 3) {
+				ret.push_back(*p);
+				count = 0;
+				last = *(p + 1);
+			}
+		} else {
+			for (int i = 0; i < count; i++)
+				ret.push_back(last);
+			last = *p;
+			count = 1;
+		}
+	}
+
+	return ret;
+}
+
 int main()
 {
 	string test;
 
 	test = "aaabbbccc";
-	println(collapse(test));
+	println(collapse2(test));
 
-	test = "abc";
-	println(collapse(test));
+	test = "aabbbccc";
+	println(collapse2(test));
 
-	test = "aaabcbccbca";
-	println(collapse(test));
+	test = "aaaabbbccc";
+	println(collapse2(test));
+
+	test = "aaazbbbccc";
+	println(collapse2(test));
+
 }
