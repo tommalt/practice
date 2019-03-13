@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -59,24 +60,69 @@ string collapse2(string s)
 			count = 1;
 		}
 	}
-
+	for (int i = 0; i < count; i++)
+		ret.push_back(last);
 	return ret;
+}
+
+void replace(string & s)
+{
+	char current;
+	int count;
+	int n_spaces;
+
+	if (s.empty())
+		return;
+
+	n_spaces = 0;
+	auto read = s.begin();
+	auto write = s.begin();
+	current = *read++;
+	count = 1;
+	for (;; read++) {
+		if (read != s.end() && *read == current) {
+			count++;
+		} else {
+			if (count < 3) {
+				read = read - count;
+				for (int i = 0; i < count; i++) {
+					*write++ = *read++;
+				}
+			} else { // count >= 3
+				n_spaces += count;
+			}
+			if (read == s.end())
+				break;
+			count = 1;
+			current = *read;
+		}
+	}
+	for (int i = 0; i < n_spaces; i++)
+		*write++ = ' ';
+}
+
+void prints(string s)
+{
+	printf("\"%s\"\n", s.c_str());
 }
 
 int main()
 {
 	string test;
 
-	test = "aaabbbccc";
-	println(collapse2(test));
+	test = "aaabbbcddddd";
+	prints(test);
+	replace(test);
+	prints(test);
 
-	test = "aabbbccc";
-	println(collapse2(test));
+	test = "xxaaavbbbc";
+	prints(test);
+	replace(test);
+	prints(test);
 
-	test = "aaaabbbccc";
-	println(collapse2(test));
-
-	test = "aaazbbbccc";
-	println(collapse2(test));
+	test = "xavvvarrrt";
+	prints(test);
+	replace(test);
+	prints(test);
 
 }
