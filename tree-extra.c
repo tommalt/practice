@@ -126,9 +126,11 @@ void tree_magick(Tree *root)
 	Tree *head;
 	while (q->size != 0) {
 		queue_pop(q, &head);
+		printf("VISIT: %d\n", head->value);
 		if (q->size == 0) {
 			head->extra = NULL;
 			prev = NULL;
+			printf("NODE %d is EOL\n", head->value);
 		} else {
 			prev = head;
 		}
@@ -155,7 +157,7 @@ int main()
 	}
 
 	printf("OK\n");
-	tree_show(root);
+	// tree_show(root);
 
 	tree_magick(root);
 	destroy_tree(root);

@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int *data = NULL;
 #define ARRAY_SIZE(x) (sizeof (x) / sizeof (x)[0])
@@ -95,6 +96,49 @@ int *binary_search(int *begin, int *end, int x)
 	}
 	return NULL;
 }
+void merge_sort(int *begin, int *end)
+{
+	int *left, *right;
+	int size;
+
+	size = end - begin;
+	if (size < 2)
+		return;
+	if (size == 2) {
+		if (*begin > *(begin + 1)) {
+			int tmp = *begin;
+			*begin = *(begin + 1);
+			*(begin + 1) = tmp;
+		}
+		return;
+	}
+	// size > 2
+	left = begin;
+	right = begin + (size / 2);
+	merge_sort(left, right);
+	merge_sort(right, end);
+
+	int *tmp_buf = malloc(size * sizeof (int));
+	int i, *middle;
+
+	i = 0;
+	middle = right;
+	while (left < middle && right < end) {
+		if (*left <= *right) {
+			tmp_buf[i++] = *left++;
+		} else {
+			tmp_buf[i++] = *right++;
+		}
+	}
+	for (; left < middle;) {
+		tmp_buf[i++] = *left++;
+	}
+	for (; right < end;) {
+		tmp_buf[i++] = *right++;
+	}
+	memcpy(begin, tmp_buf, size * sizeof (int));
+	free(tmp_buf);
+}
 int main()
 {
 	int array[] = {
@@ -105,7 +149,8 @@ int main()
 	//quicksort(array, array + ARRAY_SIZE(array) - 1);
 	//insertion_sort(array, array + ARRAY_SIZE(array));
 	//selection_sort(array, array + ARRAY_SIZE(array));
-	shell_sort(array, array + len);
+	// shell_sort(array, array + len);
+	merge_sort(array, array + len);
 	show(array, array + ARRAY_SIZE(array), '\n');
 
 }
